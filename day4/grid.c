@@ -1,4 +1,0 @@
-struct Grid
-{
-    int a;
-};

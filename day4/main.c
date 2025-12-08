@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 int main(){
     FILE *fptr;
@@ -19,16 +20,36 @@ int main(){
 
     //determine the number of columns
     //We add 1 to colNum to account for the line break characters
-    const int rowNUm = fileSize / (colNum+1);
+    const int rowNum = fileSize / (colNum+1);
     
     //set the pointer back at the beginning of the file
     fseek(fptr,0,0);
-    
-    
-    printf("%d\n",colNum);
-    printf("%d\n",rowNUm);
-    printf("%d",fileSize);
 
+    int accessible = part1(fptr, colNum, rowNum);
+    
+    printf("Part 1: %d",accessible);
 
     return 0;
+}
+
+int part1(FILE *fptr,int colNum,int rowNum){
+    int i, j;
+
+    //allocate memory for the rolls of paper grid
+    bool** grid = (bool**) malloc(rowNum*sizeof(bool*));
+    for (i = 0; i < rowNum; i++){
+        grid[i] = (bool*) malloc(colNum*sizeof(bool));
+    };
+ 
+    //build the grid
+    for (i = 0; i < rowNum; i++){
+        //move pointer to beginning of a line
+        fseek(fptr,0,(colNum+1)*i);
+        for (j = 0; j < colNum; j++){
+            //check if there is an @, ASCII = 64
+            if (fgetc(fptr) == 64){
+                grid[i][j] = true;
+            }
+        }
+    }
 }
