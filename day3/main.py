@@ -47,14 +47,14 @@ def max_battery12(digits:list) -> int:
     for j in range(12):
             #make a new spot in the list
         max_dig.append(1)
-        for i in range(k+1,len(digits)-j):
+        for i in range(k,len(digits)-(11-j)):
             if digits[i] == 9:
                 max_dig[j] = 9
-                k = i
+                k = i+1
                 break
             elif digits[i] > max_dig[j]:
                 max_dig[j] = digits[i]
-                k = i
+                k = i+1
                 
     max_str = "".join(map(str,max_dig))
     
