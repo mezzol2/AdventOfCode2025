@@ -11,7 +11,7 @@ bool checkNeighbors(bool** grid, int colNum,int rowNum, int i, int j);
 
 int main(){
     FILE *fptr;
-    fptr = fopen("test.txt","r");
+    fptr = fopen("input.txt","r");
 
     //get the size of the line and number of columns
     int colNum = 0;
@@ -32,8 +32,17 @@ int main(){
     //set the pointer back at the beginning of the file
     fseek(fptr,0,0);
 
+
     //build grid
     bool** grid = buildGrid(fptr, colNum, rowNum);
+
+    //Print the grid; used for testing and debugging
+    // for (int i =0;i<rowNum;i++){
+    //     for (int j=0;j<colNum;j++){
+    //         printf("%d",grid[i][j]);
+    //     }
+    //     printf("\n");
+    // }
     
     //close file
     fclose(fptr);
@@ -59,9 +68,8 @@ bool** buildGrid(FILE *fptr,int colNum,int rowNum){
     };
  
     //build the grid
+    fseek(fptr,0,0);
     for (i = 0; i < rowNum; i++){
-        //move pointer to beginning of a line
-        fseek(fptr,0,(colNum+1)*i);
         for (j = 0; j < colNum; j++){
             //check if there is an @, ASCII = 64
             if (fgetc(fptr) == 64){
@@ -70,6 +78,8 @@ bool** buildGrid(FILE *fptr,int colNum,int rowNum){
                 grid[i][j] = false;
             }
         }
+        //move pointer to beginning of the lext line
+        fgetc(fptr);
     }
 
     return grid;
@@ -79,7 +89,7 @@ int part1Func(bool** grid, int colNum,int rowNum){
     int i,j,count = 0;
 
     //iterate through the grid
-    for (i; i<rowNum;i++){
+    for (i=0; i<rowNum;i++){
         for (j=0; j<colNum;j++){
             //check if there is paper here
             if (grid[i][j]){
@@ -104,6 +114,49 @@ void freeGrid(bool** grid, int colNum,int rowNum){
 }
 
 bool checkNeighbors(bool** grid, int colNum,int rowNum, int i, int j){
+    int neighbors = 0;
+    bool ref = grid[i][j];
+    bool ref2 = grid[1][3];
 
+    //check left
+    if (j != 0){
+        //check above left
+        if (i != 0){
+            if (grid[i-1][j-1]) neighbors++;
+        }
+        //check direct left
+        if (grid[i][j-1]) neighbors++;
+        //check below left
+        if (i != rowNum-1){
+            if (grid[i+1][j-1]) 
+                neighbors++;
+        }
+    }
 
+    //check directly above
+    if (i != 0){
+        if (grid[i-1][j]) neighbors++;
+    }
+
+    //check directly below
+    if (i != rowNum-1){
+        if (grid[i+1][j]) neighbors++;
+    }
+        
+    //check right
+    if (j != colNum-1){
+        //check above left
+        if (i != 0){
+            if (grid[i-1][j+1]) neighbors++;
+        }
+        //check direct left
+        if (grid[i][j+1]) neighbors++;
+        //check below left
+        if (i != rowNum-1){
+            if (grid[i+1][j+1]) 
+                neighbors++;
+        }
+    }    
+
+    return neighbors < 4;
 }
