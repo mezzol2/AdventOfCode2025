@@ -2,14 +2,21 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <time.h>
 
-// Function prototype
+// Function prototypes
 bool** buildGrid(FILE *fptr, int colNum, int rowNum);
 int part1Func(bool** grid, int colNum,int rowNum);
+int part2Func(bool** grid, int colNum,int rowNum);
 void freeGrid(bool** grid, int colNum,int rowNum);
 bool checkNeighbors(bool** grid, int colNum,int rowNum, int i, int j);
+void printGrid(bool** grid, int colNum,int rowNum);
 
 int main(){
+    //start timer
+    clock_t start = clock();
+
+    //open file
     FILE *fptr;
     fptr = fopen("input.txt","r");
 
@@ -35,25 +42,23 @@ int main(){
 
     //build grid
     bool** grid = buildGrid(fptr, colNum, rowNum);
-
-    //Print the grid; used for testing and debugging
-    // for (int i =0;i<rowNum;i++){
-    //     for (int j=0;j<colNum;j++){
-    //         printf("%d",grid[i][j]);
-    //     }
-    //     printf("\n");
-    // }
     
     //close file
     fclose(fptr);
 
-    //Run part 1
+    //Run parts 1 and 2
     int part1 = part1Func(grid, colNum, rowNum);
+    int part2 = part2Func(grid, colNum, rowNum);
 
     //Free memory
     freeGrid(grid,colNum,rowNum);
     
-    printf("Part 1: %d", part1);
+    //end timer
+    clock_t end = clock();
+
+    printf("Part 1: %d\n", part1);
+    printf("Part 2: %d\n", part2);
+    printf("Time: %f seconds", ((float)(end-start))/CLOCKS_PER_SEC);
 
     return 0;
 }
@@ -116,7 +121,6 @@ void freeGrid(bool** grid, int colNum,int rowNum){
 bool checkNeighbors(bool** grid, int colNum,int rowNum, int i, int j){
     int neighbors = 0;
     bool ref = grid[i][j];
-    bool ref2 = grid[1][3];
 
     //check left
     if (j != 0){
@@ -159,4 +163,38 @@ bool checkNeighbors(bool** grid, int colNum,int rowNum, int i, int j){
     }    
 
     return neighbors < 4;
+}
+
+//Used for testing and debugging
+void printGrid(bool** grid, int colNum,int rowNum){
+        for (int i =0;i<rowNum;i++){
+        for (int j=0;j<colNum;j++){
+            printf("%d",grid[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int part2Func(bool** grid, int colNum,int rowNum){
+    int i,j,count = 0, prev = -1;
+
+    //continue until no more paper is removed
+    while (count > prev){
+        prev = count;
+        //iterate through the grid
+        for (i=0; i<rowNum;i++){
+            for (j=0; j<colNum;j++){
+                //check if there is paper here
+                if (grid[i][j]){
+                    //check the neighbors
+                    if (checkNeighbors(grid, colNum, rowNum, i, j)){
+                        grid[i][j] = false;
+                        count++;
+                    }
+                }
+            }
+        }
+    }
+
+    return count;
 }
