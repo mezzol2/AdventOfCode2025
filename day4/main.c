@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
+
+// Function prototype
+bool** buildGrid(FILE *fptr, int colNum, int rowNum);
+int part1Func(bool** grid, int colNum,int rowNum);
+void freeGrid(bool** grid, int colNum,int rowNum);
+bool checkNeighbors(bool** grid, int colNum,int rowNum, int i, int j);
 
 int main(){
     FILE *fptr;
@@ -25,18 +32,28 @@ int main(){
     //set the pointer back at the beginning of the file
     fseek(fptr,0,0);
 
-    int accessible = part1(fptr, colNum, rowNum);
+    //build grid
+    bool** grid = buildGrid(fptr, colNum, rowNum);
     
-    printf("Part 1: %d",accessible);
+    //close file
+    fclose(fptr);
+
+    //Run part 1
+    int part1 = part1Func(grid, colNum, rowNum);
+
+    //Free memory
+    freeGrid(grid,colNum,rowNum);
+    
+    printf("Part 1: %d", part1);
 
     return 0;
 }
 
-int part1(FILE *fptr,int colNum,int rowNum){
+bool** buildGrid(FILE *fptr,int colNum,int rowNum){
     int i, j;
 
     //allocate memory for the rolls of paper grid
-    bool** grid = (bool**) malloc(rowNum*sizeof(bool*));
+    bool** grid = (bool**)malloc(rowNum*sizeof(bool*));
     for (i = 0; i < rowNum; i++){
         grid[i] = (bool*) malloc(colNum*sizeof(bool));
     };
@@ -49,7 +66,44 @@ int part1(FILE *fptr,int colNum,int rowNum){
             //check if there is an @, ASCII = 64
             if (fgetc(fptr) == 64){
                 grid[i][j] = true;
+            } else{
+                grid[i][j] = false;
             }
         }
     }
+
+    return grid;
+}
+
+int part1Func(bool** grid, int colNum,int rowNum){
+    int i,j,count = 0;
+
+    //iterate through the grid
+    for (i; i<rowNum;i++){
+        for (j=0; j<colNum;j++){
+            //check if there is paper here
+            if (grid[i][j]){
+                //check the neighbors
+                if (checkNeighbors(grid, colNum, rowNum, i, j)){
+                    count++;
+                }
+            }
+        }
+    }
+
+    return count;
+}
+
+void freeGrid(bool** grid, int colNum,int rowNum){
+    for (int i=0; i<rowNum;i++){
+        free(grid[i]);
+        grid[i] = NULL;  
+    }
+    free(grid);
+    grid = NULL;
+}
+
+bool checkNeighbors(bool** grid, int colNum,int rowNum, int i, int j){
+
+
 }
