@@ -6,11 +6,15 @@
 
 struct Node* buildTree(struct Node *node, FILE *fptr);
 int part1Func(struct Node *node, FILE *fptr);
+int part2Func(struct Node *root);
 
 int main(){
+    //start timer
+    clock_t start = clock();
+
     //open file
     FILE *fptr;
-    fptr = fopen("input.txt","r");
+    fptr = fopen("test.txt","r");
 
     //initialise the root of the tree
     struct Node* root = NULL;
@@ -24,7 +28,15 @@ int main(){
     //close file
     fclose(fptr);
 
+    //get the number of ingredient ID's
+    int part2 = part2Func(root);
+
+    //end timer
+    clock_t end = clock();
+
     printf("Part 1: %d\n", part1);
+    printf("Part 2: %d\n", part2);
+    printf("Time: %f seconds", ((float)(end-start))/CLOCKS_PER_SEC);
 
     return 0;
 }
@@ -65,4 +77,9 @@ int part1Func(struct Node *root, FILE *fptr){
         }
     }
     return count;
+}
+
+//To solve part 2, we perform a traverasl of the tree.  I have arbitratily choosen to do a post-order reversal.
+int part2Func(struct Node *root){
+    return postOrder(root);
 }
