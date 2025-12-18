@@ -14,7 +14,7 @@ int main(){
 
     //open file
     FILE *fptr;
-    fptr = fopen("test.txt","r");
+    fptr = fopen("input.txt","r");
 
     //initialise the root of the tree
     struct Node* root = NULL;
@@ -30,6 +30,9 @@ int main(){
 
     //get the number of ingredient ID's
     int part2 = part2Func(root);
+
+    //free memory
+    freeNode(root);
 
     //end timer
     clock_t end = clock();
