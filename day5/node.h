@@ -58,3 +58,24 @@ bool lookup(struct Node* node, long long int x){
     }
     return lookup(node->right,x);
 }
+
+//determine the number of fresh ingredients by doing a post-order traversal
+int postOrder(struct Node* node){
+    if (node == NULL) return 0;
+
+    int numRanges = 0;
+    numRanges += postOrder(node->left);
+    numRanges += postOrder(node->right);
+    numRanges += node->high - node->low + 1;
+
+    return numRanges;
+}
+
+//free memory by doing a post-order traversal
+void freeNode(struct Node* node){
+    if (node == NULL) return;
+
+    freeNode(node->left);
+    freeNode(node->right);
+    free(node);
+}
