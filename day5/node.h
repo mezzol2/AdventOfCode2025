@@ -60,10 +60,10 @@ bool lookup(struct Node* node, long long int x){
 }
 
 //determine the number of fresh ingredients by doing a post-order traversal
-int postOrder(struct Node* node){
+long long postOrder(struct Node* node){
     if (node == NULL) return 0;
 
-    int numRanges = 0;
+    long long numRanges = 0;
     numRanges += postOrder(node->left);
     numRanges += postOrder(node->right);
     numRanges += node->high - node->low + 1;
