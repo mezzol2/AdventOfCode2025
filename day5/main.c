@@ -50,10 +50,8 @@ struct Node* buildTree(struct Node *root, FILE *fptr){
     ssize_t read = 2; //arbitrary start value
 
     while ((read = getline(&line, &len, fptr)) > 1) {
-        //if (read > 0 && line[read-1] == '\n') line[read-1] = '\0';
         char *lowStr = strtok(line, "-");
         char *highStr = strtok(NULL, "-");
-        //if (!lowStr || !highStr) continue;
         long long low = atoll(lowStr);
         long long high = atoll(highStr);
         root = insertNode(root, low, high);
