@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "matrix.h"
 #include <time.h>
+#include "matrix.h"
 
 int part1Func(struct CharMatrix matrix);
 int shootBeam(struct CharMatrix matrix, int row, int col);
@@ -11,7 +11,7 @@ int main(){
 
     //open file
     FILE *fptr;
-    fptr = fopen("test.txt","r");
+    fptr = fopen("input.txt","r");
 
     struct CharMatrix matrix = buildCharMatrix(fptr);
     int part1 = part1Func(matrix);
@@ -50,9 +50,20 @@ int shootBeam(struct CharMatrix matrix, int row, int col){
 
     // ^ here means we hit a splitter and need to conintue to the left and right
     if (c == '^'){
-        return 1 + shootBeam(matrix, row, col - 1) + shootBeam(matrix, row, col+1);
+        //update the left spot if it not on the left edge
+        if (0 < col){
+            matrix.charMatrix[row][col-1] = '|';
+        }
+        //update the right spot if it not on the right edge
+        if (col < matrix.numCol){
+            matrix.charMatrix[row][col+1] = '|';
+        }
+
+
+        return shootBeam(matrix, row+1, col - 1) + shootBeam(matrix, row+1, col+1) + 1;
     }
 
     // . here means there is empty space and the beam continues
+    matrix.charMatrix[row][col] = '|';
     return shootBeam(matrix, row + 1, col);
 }
