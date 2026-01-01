@@ -37,10 +37,10 @@ int getNumRow(FILE *fptr, int numCol){
     return fileSize / (numCol+1);
 }
 
-CharMatrix buildCharMatrix(FILE *fptr){
+struct CharMatrix buildCharMatrix(FILE *fptr){
     int i, j;
 
-    CharMatrix matrix;
+    struct CharMatrix matrix;
 
     matrix.numCol = getNumCol(fptr);
     matrix.numRow = getNumRow(fptr, matrix.numCol);
@@ -65,10 +65,12 @@ CharMatrix buildCharMatrix(FILE *fptr){
 }
 
 //for testing
-void printCharMatrix(CharMatrix matrix){
+void printCharMatrix(struct CharMatrix matrix){
     for (int i = 0; i < matrix.numRow; i++){
         for (int j = 0; j < matrix.numCol; j++){
             printf("%c",matrix.charMatrix[i][j]);
         }
+        //new line
+        printf("\n");
     }
 }
