@@ -3,6 +3,7 @@
 #include <time.h>
 
 int part1Func(struct CharMatrix matrix);
+int shootBeam(struct CharMatrix matrix, int row, int col);
 
 int main(){
     //start timer
@@ -18,7 +19,7 @@ int main(){
     //end timer
     clock_t end = clock();
 
-    // printf("Part 1: %d\n", part1);
+    printf("Part 1: %d\n", part1);
     // printf("Part 2: %lld\n", part2);
     printf("Time: %f seconds", ((float)(end-start))/CLOCKS_PER_SEC);
 
@@ -28,7 +29,7 @@ int main(){
 int part1Func(struct CharMatrix matrix){
     //determine where the beam starts
     int start = 0;
-    while (matrix.charMatrix[0][start] =! 'S'){
+    while (matrix.charMatrix[0][start] != 'S'){
         start++;
     }
 
