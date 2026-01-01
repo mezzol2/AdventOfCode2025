@@ -74,3 +74,15 @@ void printCharMatrix(struct CharMatrix matrix){
         printf("\n");
     }
 }
+
+//free memory
+void freeCharMatrix(struct CharMatrix matrix){
+    for (int i=0; i<matrix.numRow;i++){
+        free(matrix.charMatrix[i]);
+        matrix.charMatrix[i] = NULL;  
+    }
+    free(matrix.charMatrix);
+    matrix.charMatrix = NULL;
+    matrix.numRow = 0;
+    matrix.numCol = 0;
+}
