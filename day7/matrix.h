@@ -45,7 +45,7 @@ struct CharMatrix buildCharMatrix(FILE *fptr){
     matrix.numCol = getNumCol(fptr);
     matrix.numRow = getNumRow(fptr, matrix.numCol);
 
-    //allocate memory for the rolls of paper matrix
+    //allocate memory
     matrix.charMatrix = (char**)malloc(matrix.numRow*sizeof(char*));
     for (i = 0; i < matrix.numRow; i++){
         matrix.charMatrix[i] = (char*) malloc(matrix.numCol*sizeof(char));
