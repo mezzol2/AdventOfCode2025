@@ -93,23 +93,44 @@ long long part2Func(struct CharMatrix matrix){
 
     prev[start] = 1;
     
-    //iteratively propogate the beams through the current and previous arrays
+    //iteratively propogate the paths through the current and previous arrays
     //odd rows can be skipped since they only contian '.' 
-    for (int i = 2; i < matrix.numRow; i +=2){
+    for (int i = 1; i < matrix.numRow; i++){
         //go through each element in this row
         for (int j = 0; j < matrix.numCol; j++){
             
             //if the character above this spot is '^', then there are 0 beams at this spot
-            if (matrix.charMatrix[i-2][j] == '^'){
+            if (matrix.charMatrix[i-1][j] == '^'){
                 current[j] = 0;
             } else{
+                long long fromLeft = 0; long long fromRight = 0;
 
+                //check if paths will contine from the left
+                if (j > 0 && matrix.charMatrix[i-1][j-1] == '^'){
+                    fromLeft = prev[j-1];
+                }
+
+                //check if paths will contine from the right
+                if (j < matrix.numCol - 1 && matrix.charMatrix[i-1][j+1] == '^'){
+                    fromRight = prev[j+1];
+                }
+
+                current[j] = fromLeft + prev[j] + fromRight;
             }
         }
+        //set the current array as the prev array
+        //we keep the data in the new row and will overwrite data in the old row
+        long long *temp = current;
+        current = prev;
+        prev = temp;
     }
 
-    //total up the beams in the final version of the current array
+    //total up the beams in the final version of the array
     long long total = 0;
+
+    for (int i = 0; i < matrix.numCol; i++){
+        total += prev[i];
+    }
 
     //free memory
     free(prev);
